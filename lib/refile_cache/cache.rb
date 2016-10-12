@@ -28,9 +28,7 @@ module RefileCache
         cache_key = "cache#{params[:id]}#{params[:processor]}#{params[:splat].delete('/')}"
 
         if backend.exists?(cache_key)
-          file = backend.get(cache_key)
-          filename = "#{params[:file_base]}.#{params[:extension]}"
-          return [200, own_headers(filename, file.size), stream_file(env, file)]
+          return [302, { 'Location' => "https://#{ENV['S3_BUCKET_NAME']}.s3.amazonaws.com/image_cache/#{cache_key}" }, []]
         end
 
         status, headers, response = @app.call(env)
