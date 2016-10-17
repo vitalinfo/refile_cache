@@ -28,7 +28,7 @@ module RefileCache
         cache_key = "cache#{params[:id]}#{params[:processor]}#{params[:splat].delete('/')}"
 
         if backend.exists?(cache_key)
-          return [302, { 'Location' => "https://#{ENV['S3_BUCKET_NAME']}.s3.amazonaws.com/image_cache/#{cache_key}" }, []]
+          return [301, { 'Location' => "https://#{ENV['S3_BUCKET_NAME']}.s3.amazonaws.com/image_cache/#{cache_key}" }, []]
         end
 
         status, headers, response = @app.call(env)
