@@ -12,7 +12,7 @@ module RefileCache
     # This is for autoreloading to be working :D
     class Logic
       URL_PATH = /\A#{Refile.mount_point}\/.*\/store\/(fill|fit|limit|pad|convert)\//
-      URL_PROCESSOR = /\A#{Refile.mount_point}\/(?<token>.*)\/(?<backend>.*)\/(?<processor>(fill|fit|limit|pad|convert))\/(?<splat>.*)\/(?<id>.*)\/(?<file_base>.*)\.(?<extension>.*)/
+      URL_PROCESSOR = /\A#{Refile.mount_point}\/(?<token>.*)\/(?<backend>.*)\/(?<processor>(fill|fit|limit|pad|convert))\/(?<splat>.*)\/(?<id>.*)\/(?<file>.*)/
 
       def initialize(app)
         @app = app
