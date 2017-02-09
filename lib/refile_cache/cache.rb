@@ -67,9 +67,9 @@ module RefileCache
           'Access-Control-Allow-Headers' => '',
           'Access-Control-Allow-Method' => '',
           'Cache-Control' => 'public, max-age=31536000',
-          'Expires' => (Time.now + 1.year).to_s,
+          'Expires' => (Time.now + 1.year).gmtime.to_s,
           'Content-Disposition' => "inline; filename=\"#{filename}\"",
-          'Last-Modified' => (Time.now - 1.month).to_s,
+          'Last-Modified' => (Time.now - 1.month).gmtime.to_s,
           'Content-Length' => content_length.to_s,
           'X-Content-Type-Options' => 'nosniff'
         }
