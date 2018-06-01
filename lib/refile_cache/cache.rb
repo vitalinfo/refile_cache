@@ -28,7 +28,8 @@ module RefileCache
         cache_key = "cache#{params[:id]}#{params[:processor]}#{params[:splat].delete('/')}"
 
         if backend.exists?(cache_key)
-          return [301, { 'Location' => "https://#{ENV['S3_BUCKET_NAME']}.s3.amazonaws.com/image_cache/#{cache_key}" }, []]
+          file = backend.get(cache_key)
+          return [200, own_headers(params[:file], file.size), stream_file(env, file)]
         end
 
         status, headers, response = @app.call(env)
@@ -67,9 +68,9 @@ module RefileCache
           'Access-Control-Allow-Headers' => '',
           'Access-Control-Allow-Method' => '',
           'Cache-Control' => 'public, max-age=31536000',
-          'Expires' => (Time.now + 1.year).gmtime.to_s,
+          'Expires' => 1.year.since.gmtime.to_s,
           'Content-Disposition' => "inline; filename=\"#{filename}\"",
-          'Last-Modified' => (Time.now - 1.month).gmtime.to_s,
+          'Last-Modified' => 1.month.ago.gmtime.to_s,
           'Content-Length' => content_length.to_s,
           'X-Content-Type-Options' => 'nosniff'
         }
