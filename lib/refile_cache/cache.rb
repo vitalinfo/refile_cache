@@ -85,7 +85,7 @@ module RefileCache
           path = Dir::Tmpname.create(get_params(env)[:id]) {}
           IO.copy_stream file, path
         end
-        File.open(path)
+        RefileCache::FileStreamer.new(path)
       end
     end
   end
