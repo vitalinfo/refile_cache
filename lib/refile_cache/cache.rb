@@ -27,7 +27,9 @@ module RefileCache
         params = get_params(env)
         cache_key = "cache#{params[:id]}#{params[:processor]}#{params[:splat].delete('/')}"
 
-        if backend.exists?(cache_key)
+        if backend.blank?
+          return [404, {'Content-Type' => 'text/html'}, []]
+        elsif backend.exists?(cache_key)
           file = backend.get(cache_key)
           return [200, own_headers(params[:file], file.size), stream_file(env, file)]
         end
@@ -56,8 +58,8 @@ module RefileCache
 
       def backend
         Refile.backends.fetch('image_cache') do |name|
-          log_error("Could not find backend: #{name}")
-          halt 404
+          Rails.logger.error("Could not find backend: #{name}")
+          nil
         end
       end
 
